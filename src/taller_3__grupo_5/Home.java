@@ -1,7 +1,5 @@
 package taller_3__grupo_5;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.*;
 
 /**
@@ -238,7 +236,7 @@ public class Home extends javax.swing.JFrame {
     void insertarPadre(String codigo, String nombre) { //Ingresa un nuevo padre a la tabla
         try {
             st = conn.createStatement();
-            st.executeUpdate("insert into padre values(" + codigo + "," + nombre + ")");
+            st.executeUpdate("insert into padre values(" + codigo + ", " + nombre + ")");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -247,7 +245,8 @@ public class Home extends javax.swing.JFrame {
     void insertarHijo(String codigo, String nombre) { //Ingresa un nuevo hijo a la tabla
         try {
             st = conn.createStatement();
-            st.executeUpdate("insert into hijo values(" + codigo + "," + nombre + ")");
+            st.executeUpdate("insert into hijo values(" + codigo + ", " + nombre + ", null)");
+            
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -284,7 +283,7 @@ public class Home extends javax.swing.JFrame {
         try {
             st = conn.createStatement();
             st.executeUpdate("update hijo set nombre = " + nombre + "where id = " + codigo);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
     }

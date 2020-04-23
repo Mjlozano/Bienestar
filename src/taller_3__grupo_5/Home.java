@@ -372,7 +372,9 @@ public class Home extends javax.swing.JFrame {
             case 1:
                 try {
                     st = conn.createStatement();
-                    rs = st.executeQuery("SELECT * FROM padre");
+                    rs = st.executeQuery("Select *\n"
+                            + "from padre as p left outer join hijo as h on p.id=h.hijode\n"
+                            + "where hijode is null");
                     createModel();
                 } catch (Exception e) {
                 }
@@ -380,7 +382,7 @@ public class Home extends javax.swing.JFrame {
             case 2:
                 try {
                     st = conn.createStatement();
-                    rs = st.executeQuery("SELECT * FROM padre");
+                    rs = st.executeQuery("Select * from hijo where hijode is null;");
                     createModel();
                 } catch (Exception e) {
                 }

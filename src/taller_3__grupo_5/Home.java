@@ -260,12 +260,19 @@ public class Home extends javax.swing.JFrame {
 
         if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 0) {
             insertarPadre(codigo, nombre);
+            if(queryBox.getSelectedIndex() == 0){
+               queryButtonActionPerformed(evt); 
+            }
+            
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 0) {
             insertarHijo(codigo, nombre);
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 1) {
             eliminarHijo(codigo);
         } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 1) {
             eliminarPadre(codigo);
+            if(queryBox.getSelectedIndex() == 0){
+               queryButtonActionPerformed(evt); 
+            }
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 2) {
             actualizarHijo(codigo, nombre);
         } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 2) {

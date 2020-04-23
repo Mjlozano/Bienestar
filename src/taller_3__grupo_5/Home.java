@@ -1,6 +1,10 @@
 package taller_3__grupo_5;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,7 +21,7 @@ public class Home extends javax.swing.JFrame {
 
     public Home() {
         initComponents();
-    
+
     }
 
     /**
@@ -34,24 +38,31 @@ public class Home extends javax.swing.JFrame {
         tipo_accion = new javax.swing.JComboBox<>();
         codtxt = new javax.swing.JTextField();
         nombretxt = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        nombreRegLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        queryBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         aplicar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        queryButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         codpadre = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        codpadreLabel = new javax.swing.JLabel();
+        searchHijos = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        result = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(679, 420));
 
         jPanel1.setBackground(new java.awt.Color(97, 97, 97));
 
         tipo_tabla.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tabla Hijo", "Tabla Padre" }));
+        tipo_tabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipo_tablaActionPerformed(evt);
+            }
+        });
 
         tipo_accion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Insertar Registro", "Eliminar Registro", "Actualizar Registro" }));
         tipo_accion.addActionListener(new java.awt.event.ActionListener() {
@@ -60,15 +71,26 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Nombre:");
+        nombretxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombretxtActionPerformed(evt);
+            }
+        });
+
+        nombreRegLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        nombreRegLabel.setForeground(new java.awt.Color(255, 255, 255));
+        nombreRegLabel.setText("Nombre:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Codigo:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Listado de padres", "Padres sin hijos", "Niños sin padre", "Padre con el numero de hijos" }));
+        queryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Listado de padres", "Padres sin hijos", "Niños sin padre", "Padre con el numero de hijos" }));
+        queryBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                queryBoxActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -81,7 +103,12 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Consultar");
+        queryButton.setText("Consultar");
+        queryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                queryButtonActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(153, 0, 0));
 
@@ -106,9 +133,16 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Codigo de padre (Si tiene):");
+        codpadreLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        codpadreLabel.setForeground(new java.awt.Color(255, 255, 255));
+        codpadreLabel.setText("Codigo de padre (Si tiene):");
+
+        searchHijos.setText("Buscar hijos");
+        searchHijos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchHijosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,33 +159,36 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(tipo_tabla, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nombretxt)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
+                                    .addComponent(nombreRegLabel)
                                     .addComponent(tipo_accion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 51, Short.MAX_VALUE))))
+                                .addGap(0, 51, Short.MAX_VALUE))
+                            .addComponent(nombretxt)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(codpadre, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(codpadreLabel, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(aplicar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(61, 61, 61)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(queryBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(15, 15, 15)
-                                        .addComponent(jLabel3)
-                                        .addGap(33, 33, 33))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(34, 34, 34)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addComponent(jLabel3))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(34, 34, 34)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(queryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                                                    .addComponent(searchHijos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGap(33, 33, 33)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -159,20 +196,20 @@ public class Home extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tipo_tabla, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tipo_accion, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                    .addComponent(nombreRegLabel))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(codtxt)
                     .addComponent(nombretxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(codpadreLabel)
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codpadre, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -180,13 +217,15 @@ public class Home extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(queryBox, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addComponent(queryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchHijos, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        result.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -197,7 +236,9 @@ public class Home extends javax.swing.JFrame {
                 "Codigo", "Nombre"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        result.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(result);
+        result.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,13 +268,13 @@ public class Home extends javax.swing.JFrame {
             insertarPadre(codigo, nombre);
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 0) {
             insertarHijo(codigo, nombre);
-        }else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 1) {
+        } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 1) {
             eliminarHijo(codigo);
-        }else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 1) {
+        } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 1) {
             eliminarPadre(codigo);
-        }else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 2) {
+        } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 2) {
             actualizarHijo(codigo, nombre);
-        }else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 2) {
+        } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 2) {
             actualizarPadre(codigo, nombre);
         }
         clean();
@@ -244,11 +285,95 @@ public class Home extends javax.swing.JFrame {
         //Desactiva el textField de nombre cuando se elige eliminar registro
         if (tipo_accion.getSelectedIndex() == 1) {
             nombretxt.setEnabled(false);
+            nombreRegLabel.setSize(0,0);
+            nombretxt.setSize(0, 0);
             System.out.println("Eligio eliminar registro");
-        }else{
+        } else {
             nombretxt.setEnabled(true);
+            nombretxt.setSize(142, 35);
+            nombreRegLabel.setSize(47,17);
+            nombreRegLabel.setVisible(true);
         }
     }//GEN-LAST:event_tipo_accionActionPerformed
+
+    private void nombretxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombretxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombretxtActionPerformed
+
+    private void queryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryButtonActionPerformed
+        switch (queryBox.getSelectedIndex()) {
+            case 0:
+                try {
+                    st = conn.createStatement();
+                    rs = st.executeQuery("SELECT * FROM padre");
+                    createModel();
+                } catch (Exception e) {
+                }
+                break;
+            case 1:
+                try {
+                    st = conn.createStatement();
+                    rs = st.executeQuery("SELECT * FROM padre");
+                    createModel();
+                } catch (Exception e) {
+                }
+                break;
+            case 2:
+                try {
+                    st = conn.createStatement();
+                    rs = st.executeQuery("SELECT * FROM padre");
+                   createModel();
+                } catch (Exception e) {
+                }
+                break;
+            case 3:
+                try {
+                    st = conn.createStatement();
+                    rs = st.executeQuery("SELECT * FROM padre");
+                   createModel();
+                } catch (Exception e) {
+                }
+                break;
+            default:
+                System.out.println("¿Como lo hiciste?");
+                break;
+        }
+
+    }//GEN-LAST:event_queryButtonActionPerformed
+
+    private void queryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryBoxActionPerformed
+        if (queryBox.getSelectedIndex() == 0) {
+            searchHijos.setSize(113, 23);
+            searchHijos.setEnabled(true);
+        } else {
+            searchHijos.setSize(0, 0);
+            searchHijos.setEnabled(false);
+        }
+    }//GEN-LAST:event_queryBoxActionPerformed
+
+    private void searchHijosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchHijosActionPerformed
+        try {
+            int xd = (int) result.getValueAt(result.getSelectedRow(), 0);
+            System.out.println(xd);
+            st = conn.createStatement();
+            rs = st.executeQuery("select id, nombre from hijo where hijo.hijode = "+String.valueOf(xd));
+            createModel();
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+    }//GEN-LAST:event_searchHijosActionPerformed
+
+    private void tipo_tablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipo_tablaActionPerformed
+       if (tipo_tabla.getSelectedIndex() == 0) {
+            codpadre.setSize(149, 32);
+            codpadre.setEnabled(true);
+            codpadreLabel.setSize(149,17);
+        } else {
+            codpadre.setSize(0, 0);
+            codpadre.setEnabled(false);
+            codpadreLabel.setSize(0,0);
+        }
+    }//GEN-LAST:event_tipo_tablaActionPerformed
     void insertarPadre(String codigo, String nombre) { //Ingresa un nuevo padre a la tabla
         try {
             st = conn.createStatement();
@@ -260,15 +385,19 @@ public class Home extends javax.swing.JFrame {
 
     void insertarHijo(String codigo, String nombre) { //Ingresa un nuevo hijo a la tabla
         try {
+            String idpadre = "null";
             st = conn.createStatement();
-            st.executeUpdate("insert into hijo values(" + codigo + ", " + nombre + ", null)");
-            
+            if (!codpadre.getText().isEmpty()) {
+                idpadre = codpadre.getText();
+            }
+            st.executeUpdate("insert into hijo values(" + codigo + ", " + nombre + ", " + idpadre + ")");
+            System.out.println("We good");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
-    
-    void eliminarHijo(String codigo){
+
+    void eliminarHijo(String codigo) {
         try {
             st = conn.createStatement();
             st.executeUpdate("delete from hijo where hijo.id = " + codigo);
@@ -276,8 +405,8 @@ public class Home extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    void eliminarPadre(String codigo){
+
+    void eliminarPadre(String codigo) {
         try {
             st = conn.createStatement();
             st.executeUpdate("delete from padre where padre.id = " + codigo);
@@ -285,8 +414,8 @@ public class Home extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    void actualizarPadre(String codigo, String nombre){
+
+    void actualizarPadre(String codigo, String nombre) {
         try {
             st = conn.createStatement();
             st.executeUpdate("update padre set nombre = " + nombre + "where id = " + codigo);
@@ -294,8 +423,8 @@ public class Home extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    void actualizarHijo(String codigo, String nombre){
+
+    void actualizarHijo(String codigo, String nombre) {
         try {
             st = conn.createStatement();
             st.executeUpdate("update hijo set nombre = " + nombre + "where id = " + codigo);
@@ -303,12 +432,49 @@ public class Home extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    void clean(){
+
+    void clean() {
         nombretxt.setText("");
         codtxt.setText("");
+        codpadre.setText("");
     }
-    
+
+    public void createModel() {
+
+        int rowN = 0;
+        try {
+            if (rs.last()) {
+                rowN = rs.getRow();
+                System.out.println(rowN);
+                rs.first();
+                rs.previous();
+            }
+
+            DefaultTableModel ModeloTabla = (DefaultTableModel) result.getModel();
+            ModeloTabla.setRowCount(rowN);
+            ModeloTabla.setColumnCount(0);
+            ModeloTabla.addColumn("Id");
+            ModeloTabla.addColumn("Nombre");
+
+            int cont = 0;
+            while (rs.next()) {
+                //Retrieve by column name
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+
+                //Display values
+                System.out.print("ID: " + id);
+                ModeloTabla.setValueAt(id, cont, 0);
+                System.out.println(", Nombre: " + nombre);
+                ModeloTabla.setValueAt(nombre, cont, 1);
+                cont++;
+            }
+            rs.close();
+            result.setModel(ModeloTabla);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -327,19 +493,20 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aplicar;
     private javax.swing.JTextField codpadre;
+    private javax.swing.JLabel codpadreLabel;
     private javax.swing.JTextField codtxt;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel nombreRegLabel;
     private static javax.swing.JTextField nombretxt;
+    private javax.swing.JComboBox<String> queryBox;
+    private javax.swing.JButton queryButton;
+    private javax.swing.JTable result;
+    private javax.swing.JButton searchHijos;
     private static javax.swing.JComboBox<String> tipo_accion;
     private javax.swing.JComboBox<String> tipo_tabla;
     // End of variables declaration//GEN-END:variables

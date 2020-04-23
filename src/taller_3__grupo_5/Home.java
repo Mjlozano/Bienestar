@@ -583,10 +583,14 @@ public class Home extends javax.swing.JFrame {
     public static void main(String args[]) {
         SQL = new ConexionMySQL();
         conn = SQL.conectarMySQL();
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Home().setVisible(true);
+                JOptionPane.showMessageDialog(null,
+                        "Profesor, en la clase ConexionMySQL estan las variables username y password\n ahí pone el usuario y contraseña que tenga usted en el workbench",
+                        "Información",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }

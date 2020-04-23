@@ -554,16 +554,16 @@ public class Home extends javax.swing.JFrame {
             ModeloTabla.setColumnCount(0);
             ModeloTabla.addColumn("Id");
             ModeloTabla.addColumn("Nombre");
-             ModeloTabla.addColumn("N° de hijos");
+            ModeloTabla.addColumn("N° de hijos");
 
             int cont = 0;
             while (rs.next()) {
                 //Retrieve by column name
                 int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
                 int c = rs.getInt("count(hijode)");
                 //Display values
                 ModeloTabla.setValueAt(id, cont, 0);
-                System.out.println(", Nombre: " + nombre);
                 ModeloTabla.setValueAt(nombre, cont, 1);
                 ModeloTabla.setValueAt(c, cont, 2);
                 cont++;

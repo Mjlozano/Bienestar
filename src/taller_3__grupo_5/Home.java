@@ -1,9 +1,6 @@
 package taller_3__grupo_5;
 
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**

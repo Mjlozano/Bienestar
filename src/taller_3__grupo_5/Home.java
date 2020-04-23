@@ -1,6 +1,7 @@
 package taller_3__grupo_5;
 
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -254,29 +255,86 @@ public class Home extends javax.swing.JFrame {
 
     private void aplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicarActionPerformed
         //Aplica la accion dependiendo de los parametros seleccionados
+        if (codtxt.getText() == "") {
+
+        } else {
+
+        }
 
         String codigo = codtxt.getText();
         String nombre = "'" + nombretxt.getText() + "'";
 
         if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 0) {
-            insertarPadre(codigo, nombre);
-            if(queryBox.getSelectedIndex() == 0){
-               queryButtonActionPerformed(evt); 
+
+            if (codtxt.getText().isEmpty() || nombretxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡Ingrese todos los datos!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                insertarPadre(codigo, nombre);
+                if (queryBox.getSelectedIndex() == 0) {
+                    queryButtonActionPerformed(evt);
+                }
             }
-            
+
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 0) {
-            insertarHijo(codigo, nombre);
+
+            if (codtxt.getText().isEmpty() || nombretxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡Ingrese todos los datos!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                insertarHijo(codigo, nombre);
+            }
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 1) {
-            eliminarHijo(codigo);
+
+            if (codtxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡El codigo no puede ir vacio!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                eliminarHijo(codigo);
+            }
         } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 1) {
-            eliminarPadre(codigo);
-            if(queryBox.getSelectedIndex() == 0){
-               queryButtonActionPerformed(evt); 
+
+            if (codtxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡El codigo no puede ir vacio!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                eliminarPadre(codigo);
+                if (queryBox.getSelectedIndex() == 0) {
+                    queryButtonActionPerformed(evt);
+                }
             }
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 2) {
-            actualizarHijo(codigo, nombre);
+
+            if (codtxt.getText().isEmpty() || nombretxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡Ingrese todos los datos!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                actualizarHijo(codigo, nombre);
+            }
         } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 2) {
-            actualizarPadre(codigo, nombre);
+
+            if (codtxt.getText().isEmpty() || nombretxt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "¡Ingrese todos los datos!",
+                        "Advertencía",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                actualizarPadre(codigo, nombre);
+                if (queryBox.getSelectedIndex() == 0) {
+                    queryButtonActionPerformed(evt);
+                }
+            }
+
         }
         clean();
 
@@ -286,13 +344,13 @@ public class Home extends javax.swing.JFrame {
         //Desactiva el textField de nombre cuando se elige eliminar registro
         if (tipo_accion.getSelectedIndex() == 1) {
             nombretxt.setEnabled(false);
-            nombreRegLabel.setSize(0,0);
+            nombreRegLabel.setSize(0, 0);
             nombretxt.setSize(0, 0);
             System.out.println("Eligio eliminar registro");
         } else {
             nombretxt.setEnabled(true);
             nombretxt.setSize(142, 35);
-            nombreRegLabel.setSize(47,17);
+            nombreRegLabel.setSize(47, 17);
             nombreRegLabel.setVisible(true);
         }
     }//GEN-LAST:event_tipo_accionActionPerformed
@@ -323,7 +381,7 @@ public class Home extends javax.swing.JFrame {
                 try {
                     st = conn.createStatement();
                     rs = st.executeQuery("SELECT * FROM padre");
-                   createModel();
+                    createModel();
                 } catch (Exception e) {
                 }
                 break;
@@ -331,7 +389,7 @@ public class Home extends javax.swing.JFrame {
                 try {
                     st = conn.createStatement();
                     rs = st.executeQuery("SELECT * FROM padre");
-                   createModel();
+                    createModel();
                 } catch (Exception e) {
                 }
                 break;
@@ -357,22 +415,22 @@ public class Home extends javax.swing.JFrame {
             int xd = (int) result.getValueAt(result.getSelectedRow(), 0);
             System.out.println(xd);
             st = conn.createStatement();
-            rs = st.executeQuery("select id, nombre from hijo where hijo.hijode = "+String.valueOf(xd));
+            rs = st.executeQuery("select id, nombre from hijo where hijo.hijode = " + String.valueOf(xd));
             createModel();
         } catch (Exception ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_searchHijosActionPerformed
 
     private void tipo_tablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipo_tablaActionPerformed
-       if (tipo_tabla.getSelectedIndex() == 0) {
+        if (tipo_tabla.getSelectedIndex() == 0) {
             codpadre.setSize(149, 32);
             codpadre.setEnabled(true);
-            codpadreLabel.setSize(149,17);
+            codpadreLabel.setSize(149, 17);
         } else {
             codpadre.setSize(0, 0);
             codpadre.setEnabled(false);
-            codpadreLabel.setSize(0,0);
+            codpadreLabel.setSize(0, 0);
         }
     }//GEN-LAST:event_tipo_tablaActionPerformed
     void insertarPadre(String codigo, String nombre) { //Ingresa un nuevo padre a la tabla

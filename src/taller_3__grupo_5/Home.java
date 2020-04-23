@@ -390,8 +390,10 @@ public class Home extends javax.swing.JFrame {
             case 3:
                 try {
                     st = conn.createStatement();
-                    rs = st.executeQuery("SELECT * FROM padre");
-                    createModel();
+                    rs = st.executeQuery("Select p.id, p.nombre, count(hijode)\n"
+                            + "from padre as p left outer join hijo as h on p.id=h.hijode\n"
+                            + "group by p.id");
+                    createModel1(true);
                 } catch (Exception e) {
                 }
                 break;
@@ -501,7 +503,6 @@ public class Home extends javax.swing.JFrame {
     }
 
     public void createModel() {
-
         int rowN = 0;
         try {
             if (rs.last()) {
@@ -536,6 +537,45 @@ public class Home extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
+    
+    public void createModel1(boolean tercera) {
+
+        int rowN = 0;
+        try {
+            if (rs.last()) {
+                rowN = rs.getRow();
+                System.out.println(rowN);
+                rs.first();
+                rs.previous();
+            }
+
+            DefaultTableModel ModeloTabla = (DefaultTableModel) result.getModel();
+            ModeloTabla.setRowCount(rowN);
+            ModeloTabla.setColumnCount(0);
+            ModeloTabla.addColumn("Id");
+            ModeloTabla.addColumn("Nombre");
+             ModeloTabla.addColumn("N° de hijos");
+
+            int cont = 0;
+            while (rs.next()) {
+                //Retrieve by column name
+                int id = rs.getInt("id");
+                int c = rs.getInt("count(hijode)");
+                //Display values
+                ModeloTabla.setValueAt(id, cont, 0);
+                System.out.println(", Nombre: " + nombre);
+                ModeloTabla.setValueAt(nombre, cont, 1);
+                ModeloTabla.setValueAt(c, cont, 2);
+                cont++;
+            }
+            rs.close();
+            result.setModel(ModeloTabla);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    
 
     /**
      * @param args the command line arguments

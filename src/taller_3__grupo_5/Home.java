@@ -214,13 +214,10 @@ public class Home extends javax.swing.JFrame {
 
         result.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Codigo", "Nombre"
+                "Id", "Nombre"
             }
         ));
         result.setColumnSelectionAllowed(true);
@@ -334,13 +331,13 @@ public class Home extends javax.swing.JFrame {
             }
         } else if (tipo_tabla.getSelectedIndex() == 0 && tipo_accion.getSelectedIndex() == 2) {
 
-            if (codtxt.getText().isEmpty() || nombretxt.getText().isEmpty()) {
+            if (codtxt.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this,
-                        "¡Ingrese todos los datos!",
+                        "¡El codigo no puede ir vacio!",
                         "Advertencía",
                         JOptionPane.WARNING_MESSAGE);
             } else {
-                actualizarHijo(codigo, nombre);
+                actualizarHijo(codigo);
             }
         } else if (tipo_tabla.getSelectedIndex() == 1 && tipo_accion.getSelectedIndex() == 2) {
 
@@ -475,7 +472,6 @@ public class Home extends javax.swing.JFrame {
                 idpadre = codpadre.getText();
             }
             st.executeUpdate("insert into hijo values(" + codigo + ", " + nombre + ", " + idpadre + ")");
-            System.out.println("We good");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -508,10 +504,23 @@ public class Home extends javax.swing.JFrame {
         }
     }
 
-    void actualizarHijo(String codigo, String nombre) {
+    void actualizarHijo(String codigo) { 
         try {
+            String idpadre = "null";
             st = conn.createStatement();
-            st.executeUpdate("update hijo set nombre = " + nombre + "where id = " + codigo);
+            if (!codpadre.getText().isEmpty()) {
+                idpadre = codpadre.getText();
+            }
+            
+            if(nombretxt.getText().isEmpty() && !codpadre.getText().isEmpty()){
+                st.executeUpdate("update hijo set hijode =" + idpadre + " where id = " + codigo); 
+            }else if(!nombretxt.getText().isEmpty() && !codpadre.getText().isEmpty()) {
+                st.executeUpdate("update hijo set nombre = " + nombretxt.getText() + ", hijode =" + idpadre + " where id = " + codigo);
+            }else if(!nombretxt.getText().isEmpty()){
+                st.executeUpdate("update hijo set nombre =" + nombretxt.getText() + " where id = " + codigo); 
+            }
+            
+             
         } catch (SQLException e) {
             System.out.println(e);
         }
